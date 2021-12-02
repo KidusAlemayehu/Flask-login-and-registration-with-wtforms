@@ -1,0 +1,42 @@
+{% extends 'base.html'%} {%block title%} {{title}} {%endblock%} {%block content%}
+<form action="" method="POST">
+    {{ form.hidden_tag() }}
+    <div class="card bg-light">
+        <div class="card-title text-center">
+            <i class="fas fa-user-circle"></i>
+            <h2>User Register</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-floating mb-3">
+                {{form.username(class="form-control", placeholder="Enter your username")}}
+                <label for="floatingInput">Full Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                {{form.email(class="form-control", placeholder="Enter your email")}}
+                <label for="floatingInput">Email address</label>
+            </div>
+            <div class="form-floating mb-3">
+                {{form.password(class="form-control", placeholder="Enter your password")}}
+                <label for="floatingPassword">Password</label>
+            </div>
+            <div class="form-floating mb-3">
+                {{form.confirm_password(class="form-control", placeholder="Enter your password")}}
+                <label for="floatingPassword">Confirm Password</label>
+            </div>
+            <div class="form-check mb-3">
+                <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" name="remember" />
+            Remember me
+          </label>
+            </div>
+            <div class="mb-3">
+                <a href="#" class="text-secondary">Forgot Password ?</a>
+                <br />
+                <a href="#" class="text-secondary">Don't Have An Account ?</a>
+                <br />
+            </div>
+            {{form.submit(class="btn btn-outline-dark")}}
+        </div>
+    </div>
+</form>
+{%endblock%}
