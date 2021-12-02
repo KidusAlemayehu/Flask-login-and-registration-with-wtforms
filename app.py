@@ -1,14 +1,16 @@
 from flask import Flask, render_template, url_for, redirect, session, request, flash
-from flask_sqlalchemy import SQLAlchemy
+from db import db
 from forms import RegistrationForm, LoginForm
 from model import User
+from flask_migrate import Migrate
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
-db = SQLAlchemy(app)
+db.init_app(app)
+migrate = Migrate(app, db)
 app.config['SECRET_KEY'] = 'e581349e00c89fc8ffa0ae9f8e04828c8bc8b016359c99860255a11965134317'
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://postgres:3346khag@localhost/Flask-Login-with-WTForms"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:3346khag@localhost/Flask-Login-with-WTForms"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
 @app.route("/")
@@ -19,8 +21,6 @@ def index(username):
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-   if request.method == 'POST':
-       pass
     return render_template('login.html', form=form, title='Login')
 
 
@@ -31,7 +31,21 @@ def register():
         if form.validate_on_submit():
             username = form.username.data
             email = form.email.data
-            password = form.password.data
+            org_pwd = form.password.data
+            if User.get_user_by_username(username=username):
+                if User.get_user_by_email(email=email):
+                    flash(f'User Already exists', 'Error')
+                    return redirect(url_for('register'))
+                else:
+                    flash(
+                        f'Welcome {form.username.data}!, You have registered successfully', 'success')
+                    return redirect(url_for('login'))
+            elif User.get_user_by_email(email=email):
+                flash(f'Email is Already in use', 'Error')
+                return redirect(url_for('register'))
+            hs_pwd = generate_password_hash(org_pwd, method='pbkdf2:sha256')
+            user = User(username=username, email=email, password=hs_pwd)
+            user.save()
             flash(
                 f'Welcome {form.username.data}!, You have registered successfully', 'success')
             return redirect(url_for('login'))
@@ -40,6 +54,5 @@ def register():
 
 
 if __name__ == '__main__':
-    db.init_app(app)
     app.app_context().push()
     app.run(debug=True)

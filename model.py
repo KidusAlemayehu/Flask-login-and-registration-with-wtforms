@@ -1,12 +1,12 @@
-from app import db
+from db import db
 
 
 class User(db.Model):
     __table_name__ = 'user'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer(), primary_key=True)
     username = db.Column(db.String(50))
-    email = db.column(db.String(50))
-    password = db.Column(db.String(20))
+    email = db.Column(db.String(50), unique=True)
+    password = db.Column(db.String(250))
 
     @classmethod
     def get_user_by_email(cls, email):
@@ -17,5 +17,5 @@ class User(db.Model):
         return cls.query.filter_by(username=username).first()
 
     def save(self):
-        db.session.add()
+        db.session.add(self)
         db.session.commit()
