@@ -34,14 +34,14 @@ def register():
             org_pwd = form.password.data
             if User.get_user_by_username(username=username):
                 if User.get_user_by_email(email=email):
-                    flash(f'User Already exists', 'Error')
+                    flash(f'User Already exists', 'danger')
                     return redirect(url_for('register'))
                 else:
                     flash(
                         f'Welcome {form.username.data}!, You have registered successfully', 'success')
                     return redirect(url_for('login'))
             elif User.get_user_by_email(email=email):
-                flash(f'Email is Already in use', 'Error')
+                flash(f'Email is Already in use', 'danger')
                 return redirect(url_for('register'))
             hs_pwd = generate_password_hash(org_pwd, method='pbkdf2:sha256')
             user = User(username=username, email=email, password=hs_pwd)
