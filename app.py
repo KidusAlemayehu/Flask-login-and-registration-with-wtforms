@@ -9,7 +9,7 @@ app = Flask(__name__)
 db.init_app(app)
 migrate = Migrate(app, db)
 app.config['SECRET_KEY'] = 'e581349e00c89fc8ffa0ae9f8e04828c8bc8b016359c99860255a11965134317'
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:3346khag@localhost/Flask-Login-with-WTForms"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:'your_db_pwd'@localhost/Flask-Login-with-WTForms"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
