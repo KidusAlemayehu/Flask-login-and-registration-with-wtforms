@@ -21,7 +21,22 @@ def index(username):
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    return render_template('login.html', form=form, title='Login')
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            email = form.email.data
+            password = form.password.data
+            user = User.get_user_by_email(email=email)
+            if user:
+                if not check_password_hash(user.password, password):
+                    flash(f'incorrect password', 'danger')
+                    return redirect(url_for('login'))
+                else:
+                    return redirect(url_for('index', username=user.username))
+            else:
+                flash(f'there is no account with this Email Address !', 'danger')
+                return redirect(url_for('login'))
+    if request.method == 'GET':
+        return render_template('login.html', form=form, title='Login')
 
 
 @app.route("/register", methods=['GET', 'POST'])
