@@ -24,18 +24,13 @@
                 {% else %} {{form.password(class="form-control", placeholder="Enter your password")}} {% endif%}
                 <label for="floatingPassword">Password</label>
             </div>
-            <div class="form-check mb-3">
-                <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" name="remember"> Remember me
-            </label>
-            </div>
             <div class="mb-3">
                 <a href="#" class="text-secondary">Forgot Password ?</a>
                 <br>
                 <a href="#" class="text-secondary">Don't Have An Account ?</a>
                 <br>
             </div>
-            <button type="submit" class="btn btn-outline-dark">Login</button>
+            {{form.submit(class="btn btn-outline-dark")}}
         </div>
     </div>
 </form>
