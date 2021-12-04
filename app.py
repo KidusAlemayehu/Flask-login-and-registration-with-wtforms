@@ -24,19 +24,16 @@ def index():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            email = form.email.data
-            password = form.password.data
-            user = User.get_user_by_email(email=email)
-            if user and check_password_hash(user.password, password):
-                login_user(user)
-                return redirect(url_for('index'))
-            elif not user:
-                flash(f'there is no account with this Email Address !', 'danger')
-                return redirect(url_for('register'))
-    elif request.method == 'GET':
-        return render_template('login.html', form=form, title='Login')
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+        user = User.get_user_by_email(email=email)
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            return redirect(url_for('index'))
+        else:
+            flash(f'incorrect email address or password !', 'danger')
+    return render_template('login.html', form=form, title='Login')
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -71,4 +68,4 @@ def register():
 
 if __name__ == '__main__':
     app.app_context().push()
-    app.run(debug=True)
+    app.run(debug=True, port=8000)
