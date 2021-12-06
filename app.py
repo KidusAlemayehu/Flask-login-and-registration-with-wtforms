@@ -51,7 +51,7 @@ def register():
                 else:
                     flash(
                         f'Welcome {form.username.data}!, You have registered successfully', 'success')
-                    return redirect(url_for('login'))
+                    return redirect(url_for('index'))
             elif User.get_user_by_email(email=email):
                 flash(f'Email is Already in use', 'danger')
                 return redirect(url_for('register'))
